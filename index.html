@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Exerício de Navegação em Campo</title>
+  <style>
+    body {
+      font-family: Arial;
+      text-align: center;
+      padding: 20px;
+    }
+    button {
+      margin: 8px;
+      padding: 10px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<h2>Exerício de Navegação em Campo</h2>
+<div id="conteudo"></div>
+
+<script>
+
+// ==========================
+// 🔴 CONFIGURE AQUI
+// ==========================
+
+// Trilhas (ORDEM IMPORTA)
+const trilhas = {
+  T1: ["P10", "P8", "P7"],
+  T2: ["P5", "P7", "P10"],
+  T3: ["P7", "P10", "P4"]
+  T4: ["P6", "P2", "P7"],
+  T5: ["P4", "P3", "P8"],
+  T6: ["P6", "P10", "P7"],
+  T7: ["P5", "P9", "P10"],
+  T8: ["P3", "P2", "P10"],
+  T9: ["P1", "P9", "P8"],
+  T10: ["P9", "P3", "P5"],
+  T11: ["P9", "P5", "P8"],
+  T12: ["P4", "P10", "P7"],
+  T13: ["P8", "P2", "P10"],
+  T14: ["P3", "P10", "P5"],
+  T15: ["P1", "P10", "P7"],
+  // 👉 Adicione mais, caso necessário
+};
+
+// Coordenadas com 3 formatos
+const coordenadas = {
+  P1: { utm: "23L 185907.071 8247865.865", decimal: "-15.8282787, -47.93208982", dms: "15°49'41.80\"S 47°55'55.52\"W"},
+  P2: { utm: "23L 185667.472 8247675.95", decimal: "-15.8299631, -47.93434916", dms: "15°49'54.37\"S 47°56'03.66\"W"},
+  P3: { utm: "23L 185897.559 8247478.811", decimal: "-15.831772, -47.93222897", dms: "15°49'54.38\"S 47°55'56.02\"W"},
+  P4: { utm: "23L 185678.867 8247798.189", decimal: "-15.8288609, -47.93422695", dms: "15°49'43.90\"S 47°56'03.22\"W"},
+  P5: { utm: "23L 185831.754 8247618.627", decimal: "-15.8305014, -47.93282447", dms: "15°49'49.81\"S 47°55'58.17\"W"},
+  P6: { utm: "23L 185802.177 8247915.887", decimal: "-15.8278138, -47.93306158", dms: "15°49'40.13\"S 47°55'59.02\"W"},
+  P7: { utm: "23L 185654.805 8247497.319", decimal: "-15.8315743, -47.9344906", dms: "15°49'53.67\"S 47°56'04.17\"W"},
+  P8: { utm: "23L 185726.158 8247504.806", decimal: "-15.8315157, -47.93382415", dms: "15°49'53.46\"S 47°56'01.77\"W"},
+  P9: { utm: "23L 185549,281 8247602,916", decimal: "-15.8306076, -47.93546098", dms: "15°49'50.19\"S 47°56'07.66\"W"},
+  P10:{ utm: "23L 185618.863 8247852.914", decimal: "-15.8283592, -47.93477942", dms: "15°49'42.09\"S 47°56'05.21\"W"},
+};
+
+// Perguntas
+const perguntas = [
+  {
+    pergunta: "O que é uma projeção cartográfica?",
+    opcoes: ["Método para medir altitude", "Forma de representar a superfície da Terra em um plano", "Técnica de edição de imagem", "Tipo de sensor orbital"],
+    correta: 1
+  },
+  {
+    pergunta: "No contexto do conteúdo estudado, o que significa UTM?",
+    opcoes: ["Universal Terrain Map", "Universal Transverse Mercator", "United Topographic Model", "Universal Terrain Mercator"],
+    correta: 1
+  },
+{
+    pergunta: "Qual é a principal finalidade de um mapa temático?",
+    opcoes: ["Representar apenas relevo", "Apresentar informações sobre um tema específico", "Mostrar somente coordenadas geográficas", "Substituir imagens de satélite"],
+    correta: 1
+  },
+  {
+    pergunta: "Qual tipo de dado representa o espaço por pixels?",
+    opcoes: ["Vetor", "Raster (ou matricial)", "Tabela", "Geoserviço WFS"],
+    correta: 1
+  },
+  {
+    pergunta: "Qual tipo de dado representa o espaço por pontos, linhas e polígonos?",
+    opcoes: ["Raster (ou matricial)", "Vetor", "Geoserviço WMS", "Satelital"],
+    correta: 1
+  },
+  {
+    pergunta: "Qual tipo de resolução indica o tamanho do pixel no terreno (GSD)?",
+    opcoes: ["Radiométrica", "Temporal", "Espacial", "Espectral"],
+    correta: 2
+  },
+  {
+    pergunta: "Qual resolução se refere ao número de bandas espectrais do sensor?",
+    opcoes: ["Espacial", "Temporal", "Radiométrica", "Espectral"],
+    correta: 3
+  },
+  {
+    pergunta: "Qual resolução indica com que frequência um satélite revisita uma área?",
+    opcoes: ["Temporal", "Espacial", "Radiométrica", "Cartográfica"],
+    correta: 0
+  },
+  {
+    pergunta: "O que é um plugin no QGIS?",
+    opcoes: ["Um formato de imagem", "Uma extensão que adiciona funcionalidades ao software", "Um tipo de arquivo vetorial", "Um sensor orbital"],
+    correta: 1
+  },
+  {
+    pergunta: "Qual ferramenta permite medir distâncias no QGIS?",
+    opcoes: ["Identify", "Measure", "Buffer", "Clip"],
+    correta: 1
+  },
+  {
+    pergunta: "Qual ferramenta permite visualizar informações (dados alfanuméricos) de um objeto no mapa?",
+    opcoes: ["Identify", "Merge", "Buffer", "Clip"],
+    correta: 0
+  },
+  {
+    pergunta: "O que é uma tabela de atributos?",
+    opcoes: ["Lista de imagens", "Banco de dados tabular com informações das feições", "Catálogo de satélites", "Sistema de coordenadas"],
+    correta: 1
+  },
+  {
+    pergunta: "O que o plugin Planet Explorer permite fazer?",
+    opcoes: ["Editar imagens", "Buscar e visualizar imagens da constelação Planet", "Converter coordenadas", "Criar croquis"],
+    correta: 1
+  },
+  {
+    pergunta: "Qual a maior vantagem dos geoserviços (WMS, WFS, etc)?",
+    opcoes: ["Fazer o recorte da área de interesse", "Acessar dados remotos sem baixar os arquivos originais", "Melhorar resolução das imagens", "Converter raster em vetor"],
+    correta: 1
+  },
+  {
+    pergunta: "Para que serve a ferramenta buffer?",
+    opcoes: ["Criar área de influência com distância definida ao redor de um objeto", "Cortar imagens", "Medir altitude", "Converter coordenadas"],
+    correta: 0
+  },
+  {
+    pergunta: "O que faz a ferramenta clip?",
+    opcoes: ["Recorta dados usando outra camada como limite", "Mede distância", "Exporta imagens", "Cria tabela"],
+    correta: 0
+  },
+  {
+    pergunta: "O que significa NDVI?",
+    opcoes: ["Normalized Difference Vegetation Index", "National Data Vegetation Index", "Normal Data Visual Indicator", "Natural Density Vegetation Index"],
+    correta: 0
+  },
+  {
+    pergunta: "Para que serve o NDVI?",
+    opcoes: ["Analisar altitude", "Analisar temperatura", "Analisar umidade do solo", "Avaliar a presença e o vigor da vegetação (saúde fotossintética)"],
+    correta: 3
+  },
+  {
+    pergunta: "Qual das opções é um provedor de imagens de satélite?",
+    opcoes: ["Maxar", "Excel", "AutoCAD", "PostgreSQL"],
+    correta: 0
+  },
+  {
+    pergunta: "Em relação ao sensoriamento remoto, uma imagem de alta resolução espacial é caracterizada por:",
+    opcoes: ["Apresentar pixels de grandes dimensões.", "Possuir um curto tempo de revisita do satélite.", "Possuir pixels menores, permitindo identificar alvos com maior detalhamento.", "Conter um número elevado de bandas espectrais."],
+    correta: 2
+  },
+  {
+    pergunta: "O que é o Inteligeo?",
+    opcoes: ["Software de edição de imagem", "Plataforma para análise geoespacial", "Sistema operacional", "Sensor orbital"],
+    correta: 1
+  },
+  {
+    pergunta: "O que é um catálogo de imagens?",
+    opcoes: ["Lista de sensores orbitais", "Banco organizado para consulta de imagens disponíveis", "Tabela de atributos", "Arquivo raster"],
+    correta: 1
+  },
+  {
+    pergunta: "O que são alertas no Brasil MAIS?",
+    opcoes: ["Imagens editadas manualmente", "Indicações automáticas de possíveis mudanças detectadas em imagens", "Arquivos vetoriais manuais com realce de cor", "Camadas cartográficas antigas"],
+    correta: 1
+  },
+  {
+    pergunta: "Qual a diferença entre mapa e croqui?",
+    opcoes: ["Croqui é sempre digital", "Croqui é uma representação simplificada", "Croqui é sempre satelital", "Não há diferença"],
+    correta: 1
+  },
+  {
+    pergunta: "Para que serve exportar um mapa em PDF ou TIFF no layout de impressão?",
+    opcoes: ["Criar arquivos vetoriais", "Impressão ou compartilhamento do mapa finalizado", "Converter raster", "Criar tabela"],
+    correta: 1
+  },
+  {
+    pergunta: "O que é um pixel em uma imagem raster?",
+    opcoes: ["Menor unidade de uma imagem raster que representa uma área da superfície terrestre", "Um tipo de sensor orbital", "Uma ferramenta de medição", "Um formato de arquivo vetorial"],
+    correta: 0
+  },
+  {
+    pergunta: "O que significa georreferenciar uma imagem?",
+    opcoes: ["Melhorar a qualidade da imagem", "Associar a imagem a coordenadas geográficas reais", "Converter raster em vetor", "Aumentar a resolução espacial"],
+    correta: 1
+  },
+  {
+    pergunta: "Qual é a principal função de um Sistema de Informação Geográfica (SIG)?",
+    opcoes: ["Editar fotos de satélite", "Armazenar, analisar e visualizar dados espaciais", "Converter arquivos PDF em mapas", "Controlar satélites em órbita"],
+    correta: 1
+  },
+  {
+    pergunta: "O que é uma camada (layer) em um SIG?",
+    opcoes: ["Um arquivo de texto", "Um conjunto de dados geográficos representados no mapa", "Um tipo de sensor", "Um formato de imagem"],
+    correta: 1
+  },
+  {
+    pergunta: "Qual desses formatos serve para armazenar dados vetoriais?",
+    opcoes: ["JPG", "TIFF", "Shapefile", "PNG"],
+    correta: 2
+  },
+  {
+    pergunta: "O que é um mosaico de imagens de satélite?",
+    opcoes: ["Uma única imagem capturada por satélite", "Conjunto de várias imagens unidas para formar uma cobertura contínua", "Um tipo de sensor orbital", "Um índice de vegetação"],
+    correta: 1
+  },
+  {
+    pergunta: "Para que serve a ferramenta de filtragem de dados no QGIS?",
+    opcoes: ["Melhorar resolução da imagem", "Selecionar apenas registros que atendem a determinados critérios", "Converter vetor em raster", "Medir distância"],
+    correta: 1
+  },
+  {
+    pergunta: "O que significa exportar uma camada no QGIS?",
+    opcoes: ["Visualizar a camada no mapa", "Salvar os dados em um novo arquivo ou formato", "Medir feições", "Criar índice de vegetação"],
+    correta: 1
+  },
+  {
+    pergunta: "Qual é a principal utilidade de visualizar imagens de diferentes datas?",
+    opcoes: ["Melhorar resolução espacial", "Detectar mudanças ocorridas na área ao longo do tempo", "Aumentar o número de bandas espectrais", "Converter raster em vetor"],
+    correta: 1
+  },
+  {
+    pergunta: "Qual é a principal vantagem de utilizar imagens com alta resolução temporal?",
+    opcoes: ["Maior detalhamento espacial", "Mais bandas espectrais", "Maior frequência de observação da mesma área", "Melhor precisão radiométrica"],
+    correta: 2
+  },
+  {
+    pergunta: "Em qual situação o uso de dados vetoriais é mais adequado?",
+    opcoes: ["Representar uma imagem de satélite", "Armazenar valores contínuos de temperatura", "Representar limites de propriedades ou áreas de interesse", "Calcular NDVI"],
+    correta: 2
+  },
+  {
+    pergunta: "Na composição colorida de uma imagem de satélite, o que chamamos de 'Falsa Cor' (ex: R: NIR, G: Red, B: Green)?",
+    opcoes: ["Uma imagem que não tem validade científica.", "Uma técnica para destacar alvos específicos (como vegetação em vermelho) atribuindo bandas invisíveis às cores visíveis.", "Um erro de processamento digital de imagens.", "Uma imagem capturada apenas por sensores térmicos."],
+    correta: 1
+  }
+  // 👉 adicione mais caso necessário
+];
+
+// ==========================
+
+const urlParams = new URLSearchParams(window.location.search);
+const pontoAtual = urlParams.get("ponto") || "BASE";
+
+// controle perguntas
+let perguntasUsadas = JSON.parse(localStorage.getItem("perguntas_usadas") || "[]");
+
+// controle formatos
+let ordemFormatos = JSON.parse(localStorage.getItem("ordem_formatos") || "null");
+let indiceFormato = parseInt(localStorage.getItem("indice_formato") || "0");
+
+// ==========================
+// 🎲 FORMATO (sem repetir)
+// ==========================
+
+function gerarOrdemFormatos() {
+  const formatos = ["utm", "decimal", "dms"];
+
+  for (let i = formatos.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [formatos[i], formatos[j]] = [formatos[j], formatos[i]];
+  }
+
+  localStorage.setItem("ordem_formatos", JSON.stringify(formatos));
+  localStorage.setItem("indice_formato", "0");
+
+  return formatos;
+}
+
+function getProximoFormato() {
+  if (!ordemFormatos) {
+    ordemFormatos = gerarOrdemFormatos();
+  }
+
+  const formato = ordemFormatos[indiceFormato];
+  indiceFormato++;
+
+  localStorage.setItem("indice_formato", indiceFormato);
+
+  return formato;
+}
+
+// ==========================
+// ❓ PERGUNTAS
+// ==========================
+
+function pegarPergunta() {
+  if (perguntasUsadas.length >= perguntas.length) {
+    perguntasUsadas = [];
+  }
+
+  let index;
+  do {
+    index = Math.floor(Math.random() * perguntas.length);
+  } while (perguntasUsadas.includes(index));
+
+  perguntasUsadas.push(index);
+  localStorage.setItem("perguntas_usadas", JSON.stringify(perguntasUsadas));
+
+  return perguntas[index];
+}
+
+// ==========================
+// 🧭 FLUXO
+// ==========================
+
+function escolherTrilha() {
+  let html = "<h3>Selecione sua trilha</h3>";
+  for (let t in trilhas) {
+    html += `<button onclick="selecionarTrilha('${t}')">${t}</button>`;
+  }
+  document.getElementById("conteudo").innerHTML = html;
+}
+
+function selecionarTrilha(trilha) {
+  localStorage.setItem("trilha", trilha);
+
+  // reset progresso
+  localStorage.removeItem("ultimo_ponto");
+  localStorage.removeItem("ordem_formatos");
+  localStorage.removeItem("indice_formato");
+  localStorage.removeItem("perguntas_usadas");
+
+  mostrarPergunta();
+}
+
+function mostrarPergunta() {
+  const p = pegarPergunta();
+
+  let html = `<h3>${p.pergunta}</h3>`;
+
+  p.opcoes.forEach((op, i) => {
+    html += `<button onclick="responder(${i}, ${p.correta})">${op}</button>`;
+  });
+
+  document.getElementById("conteudo").innerHTML = html;
+}
+
+function responder(resp, correta) {
+  if (resp === correta) {
+    validarRota();
+  } else {
+    document.getElementById("conteudo").innerHTML =
+      "<h3>❌ Errado!</h3><p>Aguarde 5 segundos...</p>";
+
+    setTimeout(mostrarPergunta, 5000);
+  }
+}
+
+// ==========================
+// ✅ VALIDAÇÃO
+// ==========================
+
+function validarRota() {
+  const trilha = localStorage.getItem("trilha");
+
+  if (!trilha) {
+    escolherTrilha();
+    return;
+  }
+
+  const sequencia = trilhas[trilha];
+
+  // BASE
+  if (pontoAtual === "BASE") {
+    const primeiro = sequencia[0];
+
+    const formato = getProximoFormato();
+    const coord = coordenadas[primeiro][formato];
+
+    mostrarCoordenada(coord, formato, trilha, "Primeiro ponto:");
+    return;
+  }
+
+  const index = sequencia.indexOf(pontoAtual);
+
+  if (index === -1) {
+    document.getElementById("conteudo").innerHTML =
+      "<h3>❌ Ponto inválido</h3><p>Este ponto não pertence à sua trilha.</p>";
+    return;
+  }
+
+  const ultimoVisitado = localStorage.getItem("ultimo_ponto");
+
+  if (index > 0 && ultimoVisitado !== sequencia[index - 1]) {
+    document.getElementById("conteudo").innerHTML =
+      "<h3>❌ Ordem incorreta</h3><p>Você não seguiu a sequência da trilha.</p>";
+    return;
+  }
+
+  localStorage.setItem("ultimo_ponto", pontoAtual);
+
+  if (index === sequencia.length - 1) {
+    document.getElementById("conteudo").innerHTML =
+      "<h2>🎉 Parabéns!</h2><p>Você concluiu sua trilha. Retorne à base!</p>";
+    return;
+  }
+
+  const proximo = sequencia[index + 1];
+
+  const formato = getProximoFormato();
+  const coord = coordenadas[proximo][formato];
+
+  mostrarCoordenada(coord, formato, trilha, "Próximo ponto:");
+}
+
+// ==========================
+// 📍 EXIBIÇÃO
+// ==========================
+
+function mostrarCoordenada(coord, formato, trilha, titulo) {
+
+  const tipoTexto = {
+    utm: "UTM",
+    decimal: "Grau Decimal",
+    dms: "Grau, Minuto e Segundo"
+  };
+
+  document.getElementById("conteudo").innerHTML = `
+    <h3>✅ Correto!</h3>
+    <p><strong>Trilha:</strong> ${trilha}</p>
+    <p><strong>Formato:</strong> ${tipoTexto[formato]}</p>
+    <p>${titulo}</p>
+    <h2>${coord}</h2>
+  `;
+}
+
+// ==========================
+// 🚀 INÍCIO
+// ==========================
+
+escolherTrilha();
+
+</script>
+
+</body>
+</html>
