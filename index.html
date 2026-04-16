@@ -478,8 +478,27 @@ function validarRota() {
   }
   
   // 🔥 só avança depois de validar corretamente
-  progresso = progresso + 1;
-  localStorage.setItem("progresso", progresso);
+ const index = sequencia.indexOf(pontoAtual);
+
+// 🔥 ponto não pertence à trilha
+if (index === -1) {
+  document.getElementById("conteudo").innerHTML =
+    "<h3 class='erro'>❌ Ponto inválido</h3><p>Este ponto não pertence à sua trilha.</p>";
+  return;
+}
+
+// 🔥 pega progresso esperado
+let progresso = parseInt(localStorage.getItem("progresso") || "0");
+
+// 🔥 valida usando index real
+if (index !== progresso) {
+  document.getElementById("conteudo").innerHTML =
+    "<h3 class='erro'>❌ Ordem incorreta</h3><p>Você não seguiu a sequência da trilha.</p>";
+  return;
+}
+
+// 🔥 agora sim avança com segurança
+localStorage.setItem("progresso", index + 1);
   
   // final da trilha
   if (index === sequencia.length - 1) {
