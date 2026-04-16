@@ -3,28 +3,77 @@
 <head>
   <meta charset="UTF-8">
   <title>Exercício de Navegação em Campo</title>
-  <style>
-   body {
+ <style>
+  body {
     font-family: Arial, sans-serif;
     margin: 0;
-    background: linear-gradient(135deg, #1e3c72, #2a5298);
-    color: #333;
+    background: #f2f4f7;
+    color: #222;
   }
 
   h2 {
-    color: white;
-    margin-top: 20px;
+    text-align: center;
+    font-size: 22px;
+    margin: 16px 0;
   }
 
   #conteudo {
-    max-width: 500px;
-    margin: 20px auto;
-    background: white;
-    padding: 20px;
-    border-radius: 16px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    max-width: 600px;
+    margin: auto;
+    padding: 16px;
   }
-  </style>
+
+  h3 {
+    font-size: 20px;
+    margin-bottom: 16px;
+  }
+
+  button {
+    display: block;
+    width: 100%;
+    margin: 10px 0;
+    padding: 16px;
+    font-size: 18px;
+    border-radius: 12px;
+    border: 1px solid #ccc;
+    background: white;
+    text-align: left;
+    transition: 0.2s;
+  }
+
+  button:hover {
+    background: #e9ecef;
+  }
+
+  .coordenada {
+    font-size: 22px;
+    font-weight: bold;
+    background: #fff;
+    padding: 16px;
+    border-radius: 12px;
+    border: 2px solid #2a5298;
+    margin-top: 16px;
+    word-break: break-word;
+  }
+
+  .sucesso {
+    color: #2e7d32;
+    font-size: 20px;
+  }
+
+  .erro {
+    color: #c62828;
+    font-size: 20px;
+  }
+
+  .card {
+    background: white;
+    padding: 16px;
+    border-radius: 12px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  }
+</style>
 </head>
 <body>
 
@@ -351,11 +400,20 @@ function selecionarTrilha(trilha) {
 function mostrarPergunta() {
   const p = pegarPergunta();
 
-  let html = `<h3>${p.pergunta}</h3>`;
+  let html = `
+    <div class="card">
+      <h3>${p.pergunta}</h3>
+  `;
 
   p.opcoes.forEach((op, i) => {
-    html += `<button onclick="responder(${i}, ${p.correta})">${op}</button>`;
+    html += `
+      <button onclick="responder(${i}, ${p.correta})">
+        ${String.fromCharCode(65 + i)}) ${op}
+      </button>
+    `;
   });
+
+  html += "</div>";
 
   document.getElementById("conteudo").innerHTML = html;
 }
@@ -449,11 +507,13 @@ function mostrarCoordenada(coord, formato, trilha, titulo) {
   };
 
   document.getElementById("conteudo").innerHTML = `
-    <h3 class="sucesso">✅ Resposta correta!</h3>
-    <p><strong>Trilha:</strong> ${trilha}</p>
-    <p><strong>Formato:</strong> ${tipoTexto[formato]}</p>
-    <p>${titulo}</p>
-    <div class="coordenada">${coord}</div>
+    <div class="card">
+      <h3 class="sucesso">✅ Correto!</h3>
+      <p><strong>Trilha:</strong> ${trilha}</p>
+      <p><strong>Formato:</strong> ${tipoTexto[formato]}</p>
+      <p>${titulo}</p>
+      <div class="coordenada">${coord}</div>
+    </div>
   `;
 }
 
