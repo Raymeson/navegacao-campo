@@ -73,33 +73,8 @@
     margin-bottom: 16px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
   }
-  #progresso {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  background: #ffffff;
-  border-top: 2px solid #ccc;
-  padding: 10px;
-  font-size: 16px;
-  overflow-x: auto;
-  white-space: nowrap;
-}
-
-#progresso span {
-  font-weight: bold;
-}
-
-#progresso .atual {
-  color: #2a5298;
-}
-
-#progresso .ok {
-  color: #2e7d32;
-} 
 </style>
 </head>
-<div id="progresso"></div>
 <body>
 
 <h2>Exercício de Navegação em Campo</h2>
@@ -446,10 +421,9 @@ function mostrarPergunta() {
 function responder(resp, correta) {
   if (resp === correta) {
     validarRota();
-    atualizarBarraProgresso();
   } else {
     document.getElementById("conteudo").innerHTML =
-      "<h3 class='erro'>❌ Resposta incorreta</h3><p>Aguarde 5 segundos...</p>";
+      ""<h3 class='erro'>❌ Resposta incorreta</h3>"<p>Aguarde 5 segundos...</p>";
 
     setTimeout(mostrarPergunta, 5000);
   }
@@ -481,35 +455,45 @@ function validarRota() {
     const coord = coordenadas[primeiro][formato];
 
     mostrarCoordenada(coord, formato, trilha, "Primeiro ponto:");
-    atualizarBarraProgresso();
     return;
   }
 
-let progresso = parseInt(localStorage.getItem("progresso") || "0");
+  const index = sequencia.indexOf(pontoAtual);
 
-// valida se está no ponto correto
-if (sequencia[progresso] !== pontoAtual) {
-  document.getElementById("conteudo").innerHTML =
-    "<h3>❌ Ordem incorreta</h3><p>Você não seguiu a sequência da trilha.</p>";
-  return;
+  if (index === -1) {
+    document.getElementById("conteudo").innerHTML =
+      "<h3>❌ Ponto inválido</h3><p>Este ponto não pertence à sua trilha.</p>";
+    return;
+  }
+
+  let progresso = parseInt(localStorage.getItem("progresso") || "0");
+
+  // valida sequência correta
+  if (sequencia[progresso] !== pontoAtual) {
+    document.getElementById("conteudo").innerHTML =
+      "<h3>❌ Ordem incorreta</h3><p>Você não seguiu a sequência da trilha.</p>";
+    return;
+  }
+
+  // avança progresso
+  progresso++;
+  localStorage.setItem("progresso", progresso);
+
+  // final da trilha
+  if (index === sequencia.length - 1) {
+    document.getElementById("conteudo").innerHTML =
+      "<h2>🎉 Parabéns!</h2><p>Você concluiu sua trilha. Retorne à base!</p>";
+    return;
+  }
+
+  const proximo = sequencia[index + 1];
+
+  const formato = getProximoFormato();
+  const coord = coordenadas[proximo][formato];
+
+  mostrarCoordenada(coord, formato, trilha, "Próximo ponto:");
 }
 
-// avança progresso
-progresso++;
-localStorage.setItem("progresso", progresso);
-
-// chegou no final?
-if (progresso >= sequencia.length) {
-  document.getElementById("conteudo").innerHTML =
-    "<h2>🎉 Parabéns!</h2><p>Você concluiu sua trilha. Retorne à base!</p>";
-
-  atualizarBarraProgresso();
-  return;
-}
-
-// próximo ponto vem do progresso (NÃO do index)
-const proximo = sequencia[progresso];
-  
 // ==========================
 // 📍 EXIBIÇÃO
 // ==========================
@@ -533,26 +517,6 @@ function mostrarCoordenada(coord, formato, trilha, titulo) {
   `;
 }
 
-// ==========================
-// 📍 FUNÇÃO DE ATUALIZAÇÃO
-// ==========================
-  
-function atualizarBarraProgresso() {
-  const trilha = localStorage.getItem("trilha");
-  if (!trilha) return;
-
-  const sequencia = trilhas[trilha];
-  const progresso = parseInt(localStorage.getItem("progresso") || "0");
-
-  let html = "<span class='ok'>BASE</span>";
-
-  // mostra apenas os pontos já visitados
-  for (let i = 0; i < progresso; i++) {
-    html += ` → <span class="ok">${sequencia[i]}</span>`;
-  }
-
-  document.getElementById("progresso").innerHTML = html;
-}
 // ==========================
 // 🚀 INÍCIO
 // ==========================
