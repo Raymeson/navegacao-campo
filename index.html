@@ -556,16 +556,11 @@ function atualizarBarraProgresso() {
   const sequencia = trilhas[trilha];
   const progresso = parseInt(localStorage.getItem("progresso") || "0");
 
-  let html = "BASE";
+  let html = "<span class='ok'>BASE</span>";
 
-  for (let i = 0; i < sequencia.length; i++) {
-    if (i < progresso) {
-      html += ` → <span class="ok">${sequencia[i]}</span>`;
-    } else if (i === progresso) {
-      html += ` → <span class="atual">${sequencia[i]}</span>`;
-    } else {
-      html += ` → ${sequencia[i]}`;
-    }
+  // mostra apenas os pontos já visitados
+  for (let i = 0; i < progresso; i++) {
+    html += ` → <span class="ok">${sequencia[i]}</span>`;
   }
 
   document.getElementById("progresso").innerHTML = html;
