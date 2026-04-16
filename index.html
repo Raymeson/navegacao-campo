@@ -447,12 +447,9 @@ function validarRota() {
 
   // BASE
   if (pontoAtual === "BASE") {
-
-    // inicializa progresso
     localStorage.setItem("progresso", "0");
 
     const primeiro = sequencia[0];
-
     const formato = getProximoFormato();
     const coord = coordenadas[primeiro][formato];
 
@@ -462,52 +459,34 @@ function validarRota() {
 
   const index = sequencia.indexOf(pontoAtual);
 
+  // ❌ ponto não pertence à trilha
   if (index === -1) {
     document.getElementById("conteudo").innerHTML =
-      "<h3>❌ Ponto inválido</h3><p>Este ponto não pertence à sua trilha.</p>";
+      "<h3 class='erro'>❌ Ponto inválido</h3><p>Este ponto não pertence à sua trilha.</p>";
     return;
   }
 
   let progresso = parseInt(localStorage.getItem("progresso") || "0");
-  
-  // 🔥 valida usando index real do ponto
-  if (sequencia[progresso] !== pontoAtual) {
+
+  // ❌ fora de ordem
+  if (index !== progresso) {
     document.getElementById("conteudo").innerHTML =
       "<h3 class='erro'>❌ Ordem incorreta</h3><p>Você não seguiu a sequência da trilha.</p>";
     return;
   }
-  
-  // 🔥 só avança depois de validar corretamente
- const index = sequencia.indexOf(pontoAtual);
 
-// 🔥 ponto não pertence à trilha
-if (index === -1) {
-  document.getElementById("conteudo").innerHTML =
-    "<h3 class='erro'>❌ Ponto inválido</h3><p>Este ponto não pertence à sua trilha.</p>";
-  return;
-}
+  // ✅ avança progresso
+  progresso++;
+  localStorage.setItem("progresso", progresso);
 
-// 🔥 pega progresso esperado
-let progresso = parseInt(localStorage.getItem("progresso") || "0");
-
-// 🔥 valida usando index real
-if (index !== progresso) {
-  document.getElementById("conteudo").innerHTML =
-    "<h3 class='erro'>❌ Ordem incorreta</h3><p>Você não seguiu a sequência da trilha.</p>";
-  return;
-}
-
-// 🔥 agora sim avança com segurança
-localStorage.setItem("progresso", index + 1);
-  
-  // final da trilha
-  if (index === sequencia.length - 1) {
+  // 🎉 final da trilha
+  if (progresso >= sequencia.length) {
     document.getElementById("conteudo").innerHTML =
       "<h2>🎉 Parabéns!</h2><p>Você concluiu sua trilha. Retorne à base!</p>";
     return;
   }
 
-  const proximo = sequencia[index + 1];
+  const proximo = sequencia[progresso];
 
   const formato = getProximoFormato();
   const coord = coordenadas[proximo][formato];
@@ -542,7 +521,11 @@ function mostrarCoordenada(coord, formato, trilha, titulo) {
 // 🚀 INÍCIO
 // ==========================
 
-escolherTrilha();
+if (localStorage.getItem("trilha")) {
+  mostrarPergunta();
+} else {
+  escolherTrilha();
+}
 
 </script>
 
