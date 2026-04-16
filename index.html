@@ -373,18 +373,22 @@ function validarRota() {
     escolherTrilha();
     return;
   }
-
   const sequencia = trilhas[trilha];
 
   // BASE
   if (pontoAtual === "BASE") {
-    const primeiro = sequencia[0];
 
-    const formato = getProximoFormato();
-    const coord = coordenadas[primeiro][formato];
+  // 🔥 INICIALIZA O PROGRESSO CORRETAMENTE
+  localStorage.setItem("progresso", "0");
 
-    mostrarCoordenada(coord, formato, trilha, "Primeiro ponto:");
-    return;
+  const primeiro = sequencia[0];
+
+  const formato = getProximoFormato();
+  const coord = coordenadas[primeiro][formato];
+
+  mostrarCoordenada(coord, formato, trilha, "Primeiro ponto:");
+  return;
+}
   }
 
   const index = sequencia.indexOf(pontoAtual);
@@ -395,15 +399,19 @@ function validarRota() {
     return;
   }
 
-  const ultimoVisitado = localStorage.getItem("ultimo_ponto");
+  let progresso = parseInt(localStorage.getItem("progresso") || "0");
 
-  if (index > 0 && ultimoVisitado !== sequencia[index - 1]) {
-    document.getElementById("conteudo").innerHTML =
-      "<h3>❌ Ordem incorreta</h3><p>Você não seguiu a sequência da trilha.</p>";
-    return;
+// verifica se está no ponto correto da sequência
+if (sequencia[progresso] !== pontoAtual) {
+  document.getElementById("conteudo").innerHTML =
+    "<h3>❌ Ordem incorreta</h3><p>Você não seguiu a sequência da trilha.</p>";
+  return;
+}
+
+// avança progresso
+progresso++;
+localStorage.setItem("progresso", progresso);
   }
-
-  localStorage.setItem("ultimo_ponto", pontoAtual);
 
   if (index === sequencia.length - 1) {
     document.getElementById("conteudo").innerHTML =
