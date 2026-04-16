@@ -390,9 +390,10 @@ function selecionarTrilha(trilha) {
 
   // reset progresso
   localStorage.removeItem("ultimo_ponto");
-  localStorage.removeItem("ordem_formatos");
-  localStorage.removeItem("indice_formato");
-  localStorage.removeItem("perguntas_usadas");
+localStorage.removeItem("ordem_formatos");
+localStorage.removeItem("indice_formato");
+localStorage.removeItem("perguntas_usadas");
+localStorage.removeItem("progresso");
 
   mostrarPergunta();
 }
@@ -423,7 +424,7 @@ function responder(resp, correta) {
     validarRota();
   } else {
     document.getElementById("conteudo").innerHTML =
-      ""<h3 class='erro'>❌ Resposta incorreta</h3>"<p>Aguarde 5 segundos...</p>";
+    "<h3 class='erro'>❌ Resposta incorreta</h3><p>Aguarde 5 segundos...</p>";
 
     setTimeout(mostrarPergunta, 5000);
   }
