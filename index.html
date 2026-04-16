@@ -4,17 +4,26 @@
   <meta charset="UTF-8">
   <title>Exercício de Navegação em Campo</title>
   <style>
-    body {
-      font-family: Arial;
-      text-align: center;
-      padding: 20px;
-    }
-    button {
-      margin: 8px;
-      padding: 10px;
-      font-size: 16px;
-      cursor: pointer;
-    }
+   body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background: linear-gradient(135deg, #1e3c72, #2a5298);
+    color: #333;
+  }
+
+  h2 {
+    color: white;
+    margin-top: 20px;
+  }
+
+  #conteudo {
+    max-width: 500px;
+    margin: 20px auto;
+    background: white;
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  }
   </style>
 </head>
 <body>
@@ -356,7 +365,7 @@ function responder(resp, correta) {
     validarRota();
   } else {
     document.getElementById("conteudo").innerHTML =
-      "<h3>❌ Errado!</h3><p>Aguarde 5 segundos...</p>";
+      "<h3 class='erro'>❌ Resposta incorreta</h3><p>Aguarde 5 segundos...</p>";
 
     setTimeout(mostrarPergunta, 5000);
   }
@@ -440,11 +449,11 @@ function mostrarCoordenada(coord, formato, trilha, titulo) {
   };
 
   document.getElementById("conteudo").innerHTML = `
-    <h3>✅ Correto!</h3>
+    <h3 class="sucesso">✅ Resposta correta!</h3>
     <p><strong>Trilha:</strong> ${trilha}</p>
     <p><strong>Formato:</strong> ${tipoTexto[formato]}</p>
     <p>${titulo}</p>
-    <h2>${coord}</h2>
+    <div class="coordenada">${coord}</div>
   `;
 }
 
