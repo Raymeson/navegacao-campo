@@ -485,43 +485,31 @@ function validarRota() {
     return;
   }
 
-  const index = sequencia.indexOf(pontoAtual);
+let progresso = parseInt(localStorage.getItem("progresso") || "0");
 
-  if (index === -1) {
-    document.getElementById("conteudo").innerHTML =
-      "<h3>❌ Ponto inválido</h3><p>Este ponto não pertence à sua trilha.</p>";
-    return;
-  }
-
-  let progresso = parseInt(localStorage.getItem("progresso") || "0");
-
-  // valida sequência correta
-  if (sequencia[progresso] !== pontoAtual) {
-    document.getElementById("conteudo").innerHTML =
-      "<h3>❌ Ordem incorreta</h3><p>Você não seguiu a sequência da trilha.</p>";
-    return;
-  }
-
-  // avança progresso
-  progresso++;
-  localStorage.setItem("progresso", progresso);
-
-  // final da trilha
-  if (index === sequencia.length - 1) {
-    document.getElementById("conteudo").innerHTML =
-      "<h2>🎉 Parabéns!</h2><p>Você concluiu sua trilha. Retorne à base!</p>";
-    return;
-  }
-
-  const proximo = sequencia[index + 1];
-
-  const formato = getProximoFormato();
-  const coord = coordenadas[proximo][formato];
-
-  mostrarCoordenada(coord, formato, trilha, "Próximo ponto:");
-  atualizarBarraProgresso();
+// valida se está no ponto correto
+if (sequencia[progresso] !== pontoAtual) {
+  document.getElementById("conteudo").innerHTML =
+    "<h3>❌ Ordem incorreta</h3><p>Você não seguiu a sequência da trilha.</p>";
+  return;
 }
 
+// avança progresso
+progresso++;
+localStorage.setItem("progresso", progresso);
+
+// chegou no final?
+if (progresso >= sequencia.length) {
+  document.getElementById("conteudo").innerHTML =
+    "<h2>🎉 Parabéns!</h2><p>Você concluiu sua trilha. Retorne à base!</p>";
+
+  atualizarBarraProgresso();
+  return;
+}
+
+// próximo ponto vem do progresso (NÃO do index)
+const proximo = sequencia[progresso];
+  
 // ==========================
 // 📍 EXIBIÇÃO
 // ==========================
