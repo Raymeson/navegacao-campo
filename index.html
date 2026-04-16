@@ -390,11 +390,12 @@ function selecionarTrilha(trilha) {
 
   // reset progresso
   localStorage.removeItem("ultimo_ponto");
-localStorage.removeItem("ordem_formatos");
-localStorage.removeItem("indice_formato");
-localStorage.removeItem("perguntas_usadas");
-localStorage.removeItem("progresso");
-
+  localStorage.removeItem("ordem_formatos");
+  localStorage.removeItem("indice_formato");
+  localStorage.removeItem("perguntas_usadas");
+  localStorage.removeItem("progresso");
+  
+  localStorage.setItem("progresso", "0");
   mostrarPergunta();
 }
 
@@ -468,18 +469,18 @@ function validarRota() {
   }
 
   let progresso = parseInt(localStorage.getItem("progresso") || "0");
-
-  // valida sequência correta
+  
+  // 🔥 valida usando index real do ponto
   if (sequencia[progresso] !== pontoAtual) {
     document.getElementById("conteudo").innerHTML =
-      "<h3>❌ Ordem incorreta</h3><p>Você não seguiu a sequência da trilha.</p>";
+      "<h3 class='erro'>❌ Ordem incorreta</h3><p>Você não seguiu a sequência da trilha.</p>";
     return;
   }
-
-  // avança progresso
-  progresso++;
+  
+  // 🔥 só avança depois de validar corretamente
+  progresso = progresso + 1;
   localStorage.setItem("progresso", progresso);
-
+  
   // final da trilha
   if (index === sequencia.length - 1) {
     document.getElementById("conteudo").innerHTML =
