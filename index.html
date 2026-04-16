@@ -446,14 +446,15 @@ function validarRota() {
   const sequencia = trilhas[trilha];
 
   // BASE
- if (pontoAtual === "BASE") {
+  if (pontoAtual === "BASE") {
+    localStorage.setItem("progresso", "0");
 
-  // força escolher trilha sempre ao voltar pra base
-  localStorage.removeItem("trilha");
+    const primeiro = sequencia[0];
+    const formato = getProximoFormato();
+    const coord = coordenadas[primeiro][formato];
 
-  escolherTrilha();
-  return;
-}
+    mostrarCoordenada(coord, formato, trilha, "Primeiro ponto:");
+    return;
   }
 
   const index = sequencia.indexOf(pontoAtual);
@@ -530,3 +531,4 @@ if (localStorage.getItem("trilha")) {
 
 </body>
 </html>
+
