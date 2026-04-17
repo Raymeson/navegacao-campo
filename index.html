@@ -446,12 +446,22 @@ function validarRota() {
   const sequencia = trilhas[trilha];
   let progresso = parseInt(localStorage.getItem("progresso") || "0");
 
-  // 🎯 PRIMEIRO ACESSO (BASE ou QR inicial)
+  // 📍 ponto vindo do QRCode
+  const pontoLido = pontoAtual;
+
+  // 🎯 PRIMEIRO PASSO (saindo da base)
   if (progresso === 0) {
-    const primeiro = sequencia[0];
+    const esperado = sequencia[0];
+
+    if (pontoLido !== "BASE" && pontoLido !== esperado) {
+      document.getElementById("conteudo").innerHTML =
+        `<h3 class='erro'>❌ Fora da trilha</h3>
+         <p>Você não está no ponto correto da sua trilha.</p>`;
+      return;
+    }
 
     const formato = getProximoFormato();
-    const coord = coordenadas[primeiro][formato];
+    const coord = coordenadas[esperado][formato];
 
     localStorage.setItem("progresso", "1");
 
@@ -459,23 +469,37 @@ function validarRota() {
     return;
   }
 
+  // 🎯 VALIDAÇÃO NORMAL (aqui está o segredo)
+  const esperado = sequencia[progresso];
+
+  if (pontoLido !== esperado) {
+  document.getElementById("conteudo").innerHTML =
+    `<h3 class='erro'>❌ Fora da trilha</h3>
+     <p>Você está em <strong>${pontoLido}</strong>, mas deveria estar em <strong>${esperado}</strong>.</p>
+     <button onclick="mostrarPergunta()">Tentar novamente</button>`;
+  return;
+}
+
   // 🎉 FINAL
-  if (progresso >= sequencia.length) {
+  if (progresso >= sequencia.length - 1) {
     document.getElementById("conteudo").innerHTML =
       "<h2>🎉 Parabéns!</h2><p>Você concluiu sua trilha. Retorne à base!</p>";
     return;
   }
 
-  // 👉 SIMPLESMENTE AVANÇA (sem validar ponto)
+  // 👉 AVANÇA
+  progresso++;
+  localStorage.setItem("progresso", progresso);
+
   const proximo = sequencia[progresso];
 
   const formato = getProximoFormato();
   const coord = coordenadas[proximo][formato];
 
-  progresso++;
-  localStorage.setItem("progresso", progresso);
-
   mostrarCoordenada(coord, formato, trilha, "Próximo ponto:");
+  <button onclick="localStorage.clear(); location.reload();">
+  Reiniciar exercício
+</button>
 }
 // ==========================
 // 📍 EXIBIÇÃO
@@ -493,6 +517,7 @@ function mostrarCoordenada(coord, formato, trilha, titulo) {
     <div class="card">
       <h3 class="sucesso">✅ Correto!</h3>
       <p><strong>Trilha:</strong> ${trilha}</p>
+      <p><strong>Ponto atual (QR):</strong> ${pontoAtual}</p>
       <p><strong>Formato:</strong> ${tipoTexto[formato]}</p>
       <p>${titulo}</p>
       <div class="coordenada">${coord}</div>
