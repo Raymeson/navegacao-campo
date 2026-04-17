@@ -444,56 +444,39 @@ function validarRota() {
   }
 
   const sequencia = trilhas[trilha];
+  let progresso = parseInt(localStorage.getItem("progresso") || "0");
 
-  // BASE
-  if (pontoAtual === "BASE") {
-    localStorage.setItem("progresso", "0");
-
+  // 🎯 PRIMEIRO ACESSO (BASE ou QR inicial)
+  if (progresso === 0) {
     const primeiro = sequencia[0];
+
     const formato = getProximoFormato();
     const coord = coordenadas[primeiro][formato];
+
+    localStorage.setItem("progresso", "1");
 
     mostrarCoordenada(coord, formato, trilha, "Primeiro ponto:");
     return;
   }
 
-  const index = sequencia.indexOf(pontoAtual);
-
-  // ❌ ponto não pertence à trilha
-  if (index === -1) {
-    document.getElementById("conteudo").innerHTML =
-      "<h3 class='erro'>❌ Ponto inválido</h3><p>Este ponto não pertence à sua trilha.</p>";
-    return;
-  }
-
-  let progresso = parseInt(localStorage.getItem("progresso") || "0");
-
-  // ❌ fora de ordem
-  if (index !== progresso) {
-    document.getElementById("conteudo").innerHTML =
-      "<h3 class='erro'>❌ Ordem incorreta</h3><p>Você não seguiu a sequência da trilha.</p>";
-    return;
-  }
-
-  // ✅ avança progresso
-  progresso++;
-  localStorage.setItem("progresso", progresso);
-
-  // 🎉 final da trilha
+  // 🎉 FINAL
   if (progresso >= sequencia.length) {
     document.getElementById("conteudo").innerHTML =
       "<h2>🎉 Parabéns!</h2><p>Você concluiu sua trilha. Retorne à base!</p>";
     return;
   }
 
+  // 👉 SIMPLESMENTE AVANÇA (sem validar ponto)
   const proximo = sequencia[progresso];
 
   const formato = getProximoFormato();
   const coord = coordenadas[proximo][formato];
 
+  progresso++;
+  localStorage.setItem("progresso", progresso);
+
   mostrarCoordenada(coord, formato, trilha, "Próximo ponto:");
 }
-
 // ==========================
 // 📍 EXIBIÇÃO
 // ==========================
@@ -521,18 +504,9 @@ function mostrarCoordenada(coord, formato, trilha, titulo) {
 // 🚀 INÍCIO
 // ==========================
 
-const trilhaSalva = localStorage.getItem("trilha");
-
-if (pontoAtual === "BASE") {
-  escolherTrilha();
-} else if (trilhaSalva) {
-  mostrarPergunta();
-} else {
-  escolherTrilha();
-}
+escolherTrilha();
 
 </script>
 
 </body>
 </html>
-
