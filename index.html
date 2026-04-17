@@ -470,30 +470,30 @@ function validarRota() {
     return;
   }
 
-  // 🎯 VALIDAÇÃO NORMAL (aqui está o segredo)
-  const esperado = sequencia[progresso - 1];
+// 🎯 VALIDAÇÃO NORMAL CORRIGIDA
+const pontoEsperado = sequencia[progresso - 1];
 
-  if (pontoLido !== esperado) {
+// valida onde você ESTÁ
+if (pontoLido !== pontoEsperado) {
   document.getElementById("conteudo").innerHTML =
     `<h3 class='erro'>❌ Fora da trilha</h3>
-     <p>Você está em <strong>${pontoLido}</strong>, mas deveria estar em <strong>${esperado}</strong>.</p>
+     <p>Você está em <strong>${pontoLido}</strong>, mas deveria estar em <strong>${pontoEsperado}</strong>.</p>
      <button onclick="mostrarPergunta()">Tentar novamente</button>`;
   return;
 }
 
-  // 🎉 FINAL
-  if (progresso >= sequencia.length) {
-    document.getElementById("conteudo").innerHTML =
-      "<h2>🎉 Parabéns!</h2><p>Você concluiu sua trilha. Retorne à base!</p>";
-    return;
-  }
+// 🎉 FINAL
+if (progresso >= sequencia.length) {
+  document.getElementById("conteudo").innerHTML =
+    "<h2>🎉 Parabéns!</h2><p>Você concluiu sua trilha. Retorne à base!</p>";
+  return;
+}
 
- // 👉 calcular próximo ANTES de avançar
+// 👉 DEFINE PRÓXIMO SEM BAGUNÇAR O ESTADO
 const proximo = sequencia[progresso];
 
-// agora sim avança
-progresso++;
-localStorage.setItem("progresso", progresso);
+// só depois avança
+localStorage.setItem("progresso", progresso + 1);
 
 const formato = getProximoFormato();
 const coord = coordenadas[proximo][formato];
