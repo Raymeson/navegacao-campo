@@ -510,16 +510,20 @@ function mostrarCoordenada(coord, formato, trilha, titulo) {
     dms: "Grau, Minuto e Segundo"
   };
 
-  document.getElementById("conteudo").innerHTML = `
-    <div class="card">
-      <h3 class="sucesso">✅ Correto!</h3>
-      <p><strong>Trilha:</strong> ${trilha}</p>
-      <p><strong>Ponto atual (QR):</strong> ${pontoAtual}</p>
-      <p><strong>Formato:</strong> ${tipoTexto[formato]}</p>
-      <p>${titulo}</p>
-      <div class="coordenada">${coord}</div>
-    </div>
-  `;
+ document.getElementById("conteudo").innerHTML = `
+  <div class="card">
+    <h3 class="sucesso">✅ Correto!</h3>
+    <p><strong>Trilha:</strong> ${trilha}</p>
+    <p><strong>Ponto atual (QR):</strong> ${pontoAtual}</p>
+    <p><strong>Formato:</strong> ${tipoTexto[formato]}</p>
+    <p>${titulo}</p>
+    <div class="coordenada">${coord}</div>
+
+    <button onclick="localStorage.clear(); location.reload();">
+      Reiniciar exercício
+    </button>
+  </div>
+`;
 }
 
 // ==========================
