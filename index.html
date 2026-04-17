@@ -521,7 +521,11 @@ function mostrarCoordenada(coord, formato, trilha, titulo) {
 // 🚀 INÍCIO
 // ==========================
 
-if (localStorage.getItem("trilha")) {
+const trilhaSalva = localStorage.getItem("trilha");
+
+if (pontoAtual === "BASE") {
+  escolherTrilha();
+} else if (trilhaSalva) {
   mostrarPergunta();
 } else {
   escolherTrilha();
