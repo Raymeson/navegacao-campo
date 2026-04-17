@@ -471,7 +471,7 @@ function validarRota() {
   }
 
   // 🎯 VALIDAÇÃO NORMAL (aqui está o segredo)
-  const esperado = sequencia[progresso];
+  const esperado = sequencia[progresso - 1];
 
   if (pontoLido !== esperado) {
   document.getElementById("conteudo").innerHTML =
@@ -482,7 +482,7 @@ function validarRota() {
 }
 
   // 🎉 FINAL
-  if (progresso >= sequencia.length - 1) {
+  if (progresso >= sequencia.length) {
     document.getElementById("conteudo").innerHTML =
       "<h2>🎉 Parabéns!</h2><p>Você concluiu sua trilha. Retorne à base!</p>";
     return;
