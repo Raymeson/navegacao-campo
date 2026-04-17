@@ -341,8 +341,9 @@ function gerarOrdemFormatos() {
 }
 
 function getProximoFormato() {
-  if (!ordemFormatos) {
+  if (!ordemFormatos || indiceFormato >= 3) {
     ordemFormatos = gerarOrdemFormatos();
+    indiceFormato = 0;
   }
 
   const formato = ordemFormatos[indiceFormato];
