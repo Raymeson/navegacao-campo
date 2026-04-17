@@ -445,7 +445,11 @@ function validarRota() {
   }
 
   const sequencia = trilhas[trilha];
-  let progresso = parseInt(localStorage.getItem("progresso") || "0");
+  let progresso = parseInt(localStorage.getItem("progresso"));
+
+  if (isNaN(progresso)) {
+    progresso = 0;
+  }
 
   // 📍 ponto vindo do QRCode
   const pontoLido = pontoAtual;
@@ -489,11 +493,18 @@ if (progresso >= sequencia.length) {
   return;
 }
 
-// 👉 DEFINE PRÓXIMO SEM BAGUNÇAR O ESTADO
-const proximo = sequencia[progresso];
+const proximoIndex = progresso;
 
-// só depois avança
-localStorage.setItem("progresso", progresso + 1);
+if (proximoIndex >= sequencia.length) {
+  document.getElementById("conteudo").innerHTML =
+    "<h2>🎉 Parabéns!</h2><p>Você concluiu sua trilha. Retorne à base!</p>";
+  return;
+}
+
+const proximo = sequencia[proximoIndex];
+
+// só depois atualiza
+localStorage.setItem("progresso", proximoIndex + 1);
 
 const formato = getProximoFormato();
 const coord = coordenadas[proximo][formato];
