@@ -314,7 +314,21 @@ const perguntas = [
 
 const urlParams = new URLSearchParams(window.location.search);
 const pontoAtual = urlParams.get("ponto") || "BASE";
+  
+// ==========================
+// 🧹 LIMPEZA AUTOMÁTICA DE SESSÃO ANTIGA
+// ==========================
 
+const tempoMaximo = 2 * 60 * 60 * 1000; // 2 horas
+
+const ultimoUso = localStorage.getItem("ultimo_uso");
+
+if (ultimoUso && (Date.now() - parseInt(ultimoUso)) > tempoMaximo) {
+  localStorage.clear();
+}
+
+// atualiza sempre que usar
+localStorage.setItem("ultimo_uso", Date.now());
 // controle perguntas
 let perguntasUsadas = JSON.parse(localStorage.getItem("perguntas_usadas") || "[]");
 
@@ -532,13 +546,15 @@ function mostrarCoordenada(coord, formato, trilha, titulo) {
     <p>${titulo}</p>
     <div class="coordenada">${coord}</div>
 
-    <button onclick="localStorage.clear(); location.reload();">
-      Reiniciar exercício
-    </button>
+    <button onclick="reiniciarExercicio()">🔄 Reiniciar exercício </button>
   </div>
 `;
 }
 
+  function reiniciarExercicio() {
+  localStorage.clear();
+  window.location.href = window.location.pathname + "?ponto=BASE";
+}
 // ==========================
 // 🚀 INÍCIO CORRIGIDO
 // ==========================
