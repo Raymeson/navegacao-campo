@@ -488,16 +488,17 @@ function validarRota() {
     return;
   }
 
-  // 👉 AVANÇA
-  progresso++;
-  localStorage.setItem("progresso", progresso);
+ // 👉 calcular próximo ANTES de avançar
+const proximo = sequencia[progresso];
 
-  const proximo = sequencia[progresso];
+// agora sim avança
+progresso++;
+localStorage.setItem("progresso", progresso);
 
-  const formato = getProximoFormato();
-  const coord = coordenadas[proximo][formato];
+const formato = getProximoFormato();
+const coord = coordenadas[proximo][formato];
 
-  mostrarCoordenada(coord, formato, trilha, "Próximo ponto:");
+mostrarCoordenada(coord, formato, trilha, "Próximo ponto:");
 }
 // ==========================
 // 📍 EXIBIÇÃO
