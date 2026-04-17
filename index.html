@@ -540,10 +540,17 @@ function mostrarCoordenada(coord, formato, trilha, titulo) {
 }
 
 // ==========================
-// 🚀 INÍCIO
+// 🚀 INÍCIO CORRIGIDO
 // ==========================
 
-escolherTrilha();
+const trilhaSalva = localStorage.getItem("trilha");
+
+if (!trilhaSalva) {
+  escolherTrilha();
+} else {
+  // já tem trilha → continua fluxo normal
+  mostrarPergunta();
+}
 
 </script>
 
