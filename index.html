@@ -315,6 +315,10 @@ const perguntas = [
 const urlParams = new URLSearchParams(window.location.search);
 const pontoAtual = urlParams.get("ponto") || "BASE";
   
+  if (!localStorage.getItem("trilha") && pontoAtual !== "BASE") {
+  window.location.href = window.location.pathname + "?ponto=BASE";
+}
+  
 // ==========================
 // 🧹 LIMPEZA AUTOMÁTICA DE SESSÃO ANTIGA
 // ==========================
@@ -325,6 +329,9 @@ const ultimoUso = localStorage.getItem("ultimo_uso");
 
 if (ultimoUso && (Date.now() - parseInt(ultimoUso)) > tempoMaximo) {
   localStorage.clear();
+
+  // 🔥 força reinício TOTAL na BASE
+  window.location.href = window.location.pathname + "?ponto=BASE";
 }
 
 // atualiza sempre que usar
