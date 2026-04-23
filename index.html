@@ -318,7 +318,15 @@ const pontoAtual = urlParams.get("ponto") || "BASE";
   if (!localStorage.getItem("trilha") && pontoAtual !== "BASE") {
   window.location.href = window.location.pathname + "?ponto=BASE";
 }
-  
+ 
+  if (pontoAtual === "BASE") {
+  // 🔥 RESET TOTAL SEMPRE QUE VOLTAR PRA BASE
+  localStorage.removeItem("progresso");
+  localStorage.removeItem("trilha");
+  localStorage.removeItem("ordem_formatos");
+  localStorage.removeItem("indice_formato");
+  localStorage.removeItem("perguntas_usadas");
+}
 // ==========================
 // 🧹 LIMPEZA AUTOMÁTICA DE SESSÃO ANTIGA
 // ==========================
@@ -518,7 +526,7 @@ const proximoIndex = progresso;
 
 if (proximoIndex >= sequencia.length) {
   document.getElementById("conteudo").innerHTML =
-    "<h2>🎉 Parabéns!</h2><p>Você concluiu sua trilha. Retorne à base!</p>";
+   "<h2>🎉 Parabéns!</h2><p>Você concluiu sua trilha.</p><button onclick='reiniciarExercicio()'>🔄 Novo exercício</button>";
   return;
 }
 
@@ -568,10 +576,11 @@ function mostrarCoordenada(coord, formato, trilha, titulo) {
 
 const trilhaSalva = localStorage.getItem("trilha");
 
-if (!trilhaSalva) {
+if (pontoAtual === "BASE") {
   escolherTrilha();
+} else if (!trilhaSalva) {
+  window.location.href = window.location.pathname + "?ponto=BASE";
 } else {
-  // já tem trilha → continua fluxo normal
   mostrarPergunta();
 }
 
