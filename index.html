@@ -508,13 +508,32 @@ const pontoEsperado = sequencia[progresso - 1];
 
 // valida onde você ESTÁ
 if (pontoLido !== pontoEsperado) {
-  document.getElementById("conteudo").innerHTML =
-    `<h3 class='erro'>❌ Fora da trilha</h3>
-     <p>Você está em <strong>${pontoLido}</strong>, mas deveria estar em <strong>${pontoEsperado}</strong>.</p>
-     <button onclick="mostrarPergunta()">Tentar novamente</button>`;
+
+  const formato = getProximoFormato();
+  const coord = coordenadas[pontoEsperado][formato];
+
+  const tipoTexto = {
+    utm: "UTM",
+    decimal: "Grau Decimal",
+    dms: "Grau, Minuto e Segundo"
+  };
+
+  document.getElementById("conteudo").innerHTML = `
+    <div class="card">
+      <h3 class='erro'>❌ Fora da trilha</h3>
+
+      <p>Você está em <strong>${pontoLido}</strong>, mas deveria estar em <strong>${pontoEsperado}</strong>.</p>
+
+      <p><strong>Vá até o ponto correto:</strong></p>
+      <p><strong>Formato:</strong> ${tipoTexto[formato]}</p>
+      <div class="coordenada">${coord}</div>
+
+      <button onclick="mostrarPergunta()">📍 Já cheguei no ponto correto</button>
+      <button onclick="reiniciarExercicio()">🔄 Reiniciar exercício</button>
+    </div>
+  `;
   return;
 }
-
 // 🎉 FINAL
 if (progresso >= sequencia.length) {
   document.getElementById("conteudo").innerHTML =
