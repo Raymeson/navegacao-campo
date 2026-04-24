@@ -157,7 +157,7 @@ const perguntas = [
     opcoes: ["Universal Terrain Map", "Universal Transverse Mercator", "United Topographic Model", "Universal Terrain Mercator"],
     correta: 1
   },
-{
+  {
     pergunta: "Qual é a principal finalidade de um mapa temático?",
     opcoes: ["Representar apenas relevo", "Apresentar informações sobre um tema específico", "Mostrar somente coordenadas geográficas", "Substituir imagens de satélite"],
     correta: 1
@@ -258,8 +258,8 @@ const perguntas = [
     correta: 1
   },
   {
-    pergunta: "O que são alertas no Brasil MAIS?",
-    opcoes: ["Imagens editadas manualmente", "Indicações automáticas de possíveis mudanças detectadas em imagens", "Arquivos vetoriais manuais com realce de cor", "Camadas cartográficas antigas"],
+    pergunta: "No contexto da plataforma Brasil MAIS, os alertas de detecção de mudanças são definidos como:",
+    opcoes: ["Vetores criados via interpretação visual humana sobre imagens de satélite.", "Apontamentos gerados automaticamente por algoritmos que identificam em imagens satelitais as alterações na cobertura do solo.", "Filtros de realce de cor aplicados manualmente para destacar áreas de desmatamento.", "Base de dados históricos de cartografia analógica integrada ao sistema."],
     correta: 1
   },
   {
@@ -268,8 +268,8 @@ const perguntas = [
     correta: 1
   },
   {
-    pergunta: "Para que serve exportar um mapa em PDF ou TIFF no layout de impressão?",
-    opcoes: ["Criar arquivos vetoriais", "Impressão ou compartilhamento do mapa finalizado", "Converter raster", "Criar tabela"],
+    pergunta: "Qual é a finalidade principal de exportar uma composição de mapa em formatos PDF ou TIFF GeoTIFF a partir do Layout de Impressão do QGIS?",
+    opcoes: ["Gerar novas camadas vetoriais passíveis de edição geométrica.", "Produzir um arquivo final para impressão ou compartilhamento com usuários externos.", "Realizar a conversão de formatos raster para redução do tamanho do banco de dados.", "Automatizar o preenchimento de colunas na tabela de atributos."],
     correta: 1
   },
   {
@@ -283,7 +283,7 @@ const perguntas = [
     correta: 1
   },
   {
-    pergunta: "Qual é a principal função de um Sistema de Informação Geográfica (SIG)?",
+    pergunta: "Quais as principais funções de um Sistema de Informação Geográfica (SIG)?",
     opcoes: ["Editar fotos de satélite", "Armazenar, analisar e visualizar dados espaciais", "Converter arquivos PDF em mapas", "Controlar satélites em órbita"],
     correta: 1
   },
@@ -308,14 +308,14 @@ const perguntas = [
     correta: 1
   },
   {
-    pergunta: "O que significa exportar uma camada no QGIS?",
-    opcoes: ["Visualizar a camada no mapa", "Salvar os dados em um novo arquivo ou formato", "Medir feições", "Criar índice de vegetação"],
+    pergunta: "No QGIS, a função de 'Exportar' uma camada (Salvar feições como...) é utilizada principalmente para:",
+    opcoes: ["Alterar a simbologia visual das feições sem modificar o arquivo original.", "Gravar os dados geográficos em um novo arquivo, permitindo a conversão de formatos (ex: de Shapefile para GeoPackage).", "Calcular a área e o perímetro de geometrias complexas de forma temporária.", "Gerar automaticamente um índice de vegetação (NDVI) a partir de bandas espectrais."],
     correta: 1
   },
   {
-    pergunta: "Qual é a principal utilidade de visualizar imagens de diferentes datas?",
-    opcoes: ["Melhorar resolução espacial", "Detectar mudanças ocorridas na área ao longo do tempo", "Aumentar o número de bandas espectrais", "Converter raster em vetor"],
-    correta: 1
+    pergunta: "A detecção de mudanças (Change Detection) em geoprocessamento é um procedimento que depende diretamente de:",
+    opcoes: ["Imagens com maior número de bandas infravermelhas.", "Conversão de arquivos raster para o formato GeoPackage ou Shapefile.", "Melhoria do contraste radiométrico por meio de filtros digitais.", "Visualização e comparação de cenas da mesma localização geográfica capturadas em momentos diferentes."],
+    correta: 3
   },
   {
     pergunta: "Qual é a principal vantagem de utilizar imagens com alta resolução temporal?",
@@ -328,9 +328,24 @@ const perguntas = [
     correta: 2
   },
   {
-    pergunta: "Na composição colorida de uma imagem de satélite, o que chamamos de 'Falsa Cor' (ex: R: NIR, G: Red, B: Green)?",
-    opcoes: ["Uma imagem que não tem validade científica.", "Uma técnica para destacar alvos específicos (como vegetação em vermelho) atribuindo bandas invisíveis às cores visíveis.", "Um erro de processamento digital de imagens.", "Uma imagem capturada apenas por sensores térmicos."],
+    pergunta: "As composições coloridas em 'Falsa Cor' (como a RGB 432 do Landsat 8, que associa o infravermelho próximo ao canal vermelho) são amplamente utilizadas em Sensoriamento Remoto para:",
+    opcoes: ["Corrigir distorções atmosféricas.", "Facilitar a distinção de alvos específicos, como a vegetação, ao atribuir bandas diferentes das visíveis ao olho humano aos canais de cores RGB.", "Notificar o usuário de que houve um erro crítico no processamento digital daquelas bandas.", "Representar dados obtidos exclusivamente por sensores ativos de radar e laser."],
     correta: 1
+  },
+  {
+    pergunta: "Qual ferramenta de geoprocessamento deve ser utilizada pelo analista para delimitar automaticamente uma área de preservação de 30 metros ao redor de uma linha que representa um rio?",
+    opcoes: ["Intersecção (Intersection).", "Recortar (Clip).", "Diferença Simétrica (Symmetric Difference).", "Área de Influência (Buffer)."],
+    correta: 3
+  },
+  {
+    pergunta: "O que acontece com a geometria de um arquivo vetorial quando realizamos o procedimento de 'Simplificar Geometria'?",
+    opcoes: ["O número de vértices é reduzido, diminuindo o detalhamento das curvas para reduzir o tamanho do arquivo.", "A camada é convertida automaticamente de polígono para ponto.", "O software aumenta a resolução espacial do arquivo, tornando os contornos mais precisos.", "Todos os atributos da tabela são apagados, restando apenas a forma geométrica."],
+    correta: 0
+  },
+  {
+    pergunta: "Se você possui um arquivo vetorial com todos os rios do Brasil, mas precisa trabalhar apenas com os rios que estão dentro do limite de um determinado município, qual ferramenta deve usar?",
+    opcoes: ["Dissolver (Dissolve).", "Buffer (Área de Influência).", "Centróides.", "Recortar (Clip)."],
+    correta: 3
   }
   // 👉 adicione mais caso necessário
 ];
